@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Hamburger from './Hamburger.js'
+import Reviews from './Reviews.js'
 
 const DEFAULT_DESCRIPTION = ''
 
 export default function Products({ addToCart }) {
+    const reviewRef = useRef()
+    const [reviews, setReviews] = useState([])
     const [descript, setDescript] = useState(DEFAULT_DESCRIPTION)
     const [display, setDisplay] = useState(false)
     const [products] = useState([
@@ -58,6 +61,12 @@ export default function Products({ addToCart }) {
       show.style.display = 'none'
     }
 
+    const handleReview = () => {
+      let review = reviewRef.current
+      setReviews(prevReviews => {return [...prevReviews, {id:Math.random(0,10000), text:review.value}]})
+      // button onClick={() => handleReview(product) }
+    }
+    
     return (
         <>
           <h1>Products</h1>
@@ -72,6 +81,10 @@ export default function Products({ addToCart }) {
                 </button>
                 <section onClick={() => renderInfo(product)}>
                     <Hamburger/>
+                </section>
+                <section>  
+                  <p>Leave a review: <input type="text" placeholder="My review..." ref={reviewRef}/><button onClick={handleReview}>Post</button></p>
+                  <p><Reviews reviews={reviews}/></p>
                 </section>
               </div>
             ))}
